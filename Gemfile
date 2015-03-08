@@ -7,6 +7,8 @@ gem 'sinatra-activerecord'
 gem 'sqlite3'
 gem 'rake'
 
+gem 'mifi_crypt'
+
 gem 'unicorn'
 
 group :development, :test do

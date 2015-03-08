@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'sinatra/activerecord'
 
 require File.expand_path('../app/helpers/package_helpers.rb',  __FILE__)
+require File.expand_path('../app/models/vsimcard.rb',  __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -21,7 +22,13 @@ class MyApp < Sinatra::Base
   end
 
   post '/3g' do
-    'everything fine.'
+    binding.pry
+    key = @package[11]
+    pk_encrypt(key, Vsimcard.to_package)
+  end
+
+  post '/auth' do
+    binding.pry
   end
 
 end

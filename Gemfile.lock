@@ -21,6 +21,7 @@ GEM
     json (1.8.2)
     kgio (2.9.2)
     method_source (0.8.2)
+    mifi_crypt (0.0.1)
     minitest (5.5.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -53,6 +54,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mifi_crypt
   pry
   rake
   sinatra

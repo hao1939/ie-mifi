@@ -1,4 +1,10 @@
+require 'mifi_crypt'
+
 module MyAppHelpers
+
+  include MifiCrypt
+
+  #pk_encrypt
 
   def parse_body(io)
     data = []
