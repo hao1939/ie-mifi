@@ -1,3 +1,10 @@
+GIT
+  remote: hao@hao1939.com:/var/git/mifi_crypt.git
+  revision: a1b4e1451235e85cbc2c4153347afa529af15510
+  tag: v0.0.9
+  specs:
+    mifi_crypt (0.0.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -55,6 +62,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  mifi_crypt!
   minitest
   pry
   rack-test
