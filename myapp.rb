@@ -24,7 +24,7 @@ class MyApp < Sinatra::Base
   post '/3g' do
     binding.pry
     key = @package[11]
-    pk_encrypt(key, Vsimcard.to_package)
+    '1' + pk_encrypt(key, Vsimcard.to_package)
   end
 
   post '/auth' do
