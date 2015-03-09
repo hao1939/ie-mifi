@@ -11,5 +11,6 @@ gem 'unicorn'
 
 group :development, :test do
   gem 'pry'
+  gem 'minitest'
+  gem 'rack-test'
 end
-
