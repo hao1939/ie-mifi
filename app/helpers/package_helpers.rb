@@ -10,7 +10,9 @@ module MyAppHelpers
       size = byte.unpack('H*')[0].hex
       data << io.read(size)
     end while(true)
-    data
+    io.rewind
+    raw = io.read
+    return data, raw
   end
 
 end
