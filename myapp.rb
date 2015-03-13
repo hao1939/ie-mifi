@@ -7,6 +7,7 @@ require File.expand_path('../app/models/sim_card.rb', __FILE__)
 require File.expand_path('../app/models/mifi_request.rb', __FILE__)
 require File.expand_path('../app/models/g3_request.rb', __FILE__)
 require File.expand_path('../app/models/auth_request.rb', __FILE__)
+require File.expand_path('../app/models/beat_request.rb', __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -40,7 +41,14 @@ class MyApp < Sinatra::Base
 
   post '/auth' do
     auth_request = AuthRequest.new(*@data)
-    binding.pry
+    halt(400, 'sign error!') unless auth_request.valid?
+    'SW1SW2'
+  end
+
+  post '/beats' do
+    beat_request = BeatRequest.new(*@data)
+    halt(400, 'sign error!') unless beat_request.valid?
+    'hi'
   end
 end
 
