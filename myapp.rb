@@ -5,6 +5,8 @@ require 'mifi_crypt'
 require File.expand_path('../app/helpers/package_helpers.rb',  __FILE__)
 require File.expand_path('../app/models/sim_card.rb', __FILE__)
 require File.expand_path('../app/models/mifi_request.rb', __FILE__)
+require File.expand_path('../app/models/g3_request.rb', __FILE__)
+require File.expand_path('../app/models/auth_request.rb', __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -22,22 +24,22 @@ class MyApp < Sinatra::Base
   end
 
   before do
-    @data, @raw = parse_body(request.body)
+    @data = parse_body(request.body)
   end
 
   before '/3g' do
-    @mifi_request = MifiRequest.new(@data, @raw)
+    @mifi_request = G3Request.new(*@data)
     halt(400, 'sign error!') unless @mifi_request.valid?
     @pkey = @mifi_request.pkey
   end
 
   post '/3g' do
     sim_card = SimCard.new # TODO
-    #binding.pry
     '1' + pk_encrypt(@pkey, sim_card.g3)
   end
 
   post '/auth' do
+    auth_request = AuthRequest.new(*@data)
     binding.pry
   end
 end
