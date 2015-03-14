@@ -8,6 +8,7 @@ require File.expand_path('../app/models/mifi_request.rb', __FILE__)
 require File.expand_path('../app/models/g3_request.rb', __FILE__)
 require File.expand_path('../app/models/auth_request.rb', __FILE__)
 require File.expand_path('../app/models/beat_request.rb', __FILE__)
+require File.expand_path('../app/models/user.rb', __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
