@@ -9,6 +9,7 @@ require File.expand_path('../app/models/g3_request.rb', __FILE__)
 require File.expand_path('../app/models/auth_request.rb', __FILE__)
 require File.expand_path('../app/models/beat_request.rb', __FILE__)
 require File.expand_path('../app/models/user.rb', __FILE__)
+require File.expand_path('../app/models/flow_log.rb', __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -49,6 +50,8 @@ class MyApp < Sinatra::Base
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
     halt(400, 'sign error!') unless beat_request.valid?
+    flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
+    flow_log.save!
     "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
   end
 end
