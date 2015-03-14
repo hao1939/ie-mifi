@@ -8,6 +8,10 @@ class MifiRequest
 
   attr_accessor :data
 
+  def user
+    return User.find(@data[1].unpack('N*')[0])
+  end
+
   def valid?
     return mac_valid?
   end

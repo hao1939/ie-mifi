@@ -19,7 +19,7 @@ class G3Request < MifiRequest
   end
 
   def mac_key
-    "\xFF\b3DUfw\x88\x99\xAA\x03\x04\x05\x06\a\b" # TODO
+    user.mac_key
   end
 
   def sign_verified?
