@@ -49,7 +49,7 @@ class MyApp < Sinatra::Base
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
     halt(400, 'sign error!') unless beat_request.valid?
-    'hi'
+    "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
   end
 end
 

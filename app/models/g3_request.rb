@@ -4,8 +4,8 @@ class G3Request < MifiRequest
   end
 
   def valid?
-    return mac_valid? && sign_verified?
-    rescue
+    super && sign_verified?
+  rescue
       nil
   end
 

@@ -9,11 +9,17 @@ class MifiRequest
   attr_accessor :data
 
   def user
-    return User.find(@data[1].unpack('N*')[0])
+    @user ||= User.find(@data[1].unpack('N*')[0])
   end
 
   def valid?
-    return mac_valid?
+    return !user.nil? && mac_valid?
+  rescue
+    nil
+  end
+
+  def to_s
+    @s ||= "raw: #{@raw.unpack('H*')}"
   end
 
   private
