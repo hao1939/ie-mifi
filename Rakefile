@@ -7,7 +7,7 @@ namespace :db do
 end
 
 require 'rake/testtask'
-Rake::TestTask.new(:test => 'db:setup') do |t|
+Rake::TestTask.new do |t|
   t.pattern = "spec/**/*_spec.rb"
 end
 
