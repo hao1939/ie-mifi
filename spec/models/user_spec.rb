@@ -12,4 +12,36 @@ describe User do
 
     user.destroy!
   end
+
+  it 'unbind should deactivate old card_usages' do
+    sim_card = Minitest::Mock.new
+    sim_card.expect(:deactivate!, true)
+
+    user = User.create
+    user.stub(:card_bindings, [sim_card]) do
+      user.unbind
+    end
+
+    sim_card.verify
+  end
+
+  it 'card_usages should return all binded card_usages' do
+    sim_cards = []
+    (1..rand(3..5)).each {sim_cards << SimCard.create}
+
+    user = User.create
+    card_bindings = sim_cards.map {|card| CardBinding.create(:sim_card_id => card.id, :user_id => user.id)}
+
+    assert_equal card_bindings, user.card_bindings
+  end
+
+  it 'bind should create an instance of CardBinding' do
+    sim_card = SimCard.create
+    user = User.first
+
+    card_binding = user.bind(sim_card)
+
+    assert card_binding.is_a?(CardBinding)
+    assert card_binding.active?
+  end
 end
