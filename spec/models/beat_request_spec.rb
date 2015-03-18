@@ -11,10 +11,12 @@ describe BeatRequest do
   it 'should be valid if mac was verified' do
     beat_request = BeatRequest.new(*parse_body(@io))
 
-    assert beat_request.valid?
+    beat_request.stub(:mac_key, "\x11\"3DUfw\x88\x99\xAA\xBB\xCC\xDD\xEE\xFF\x00".b) do
+      assert beat_request.valid?
 
-    beat_request.stub(:des3mac, false) do
-      assert !beat_request.valid?
+      beat_request.stub(:des3mac, false) do
+        assert !beat_request.valid?
+      end
     end
   end
 end

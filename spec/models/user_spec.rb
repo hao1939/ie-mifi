@@ -44,4 +44,12 @@ describe User do
     assert card_binding.is_a?(CardBinding)
     assert card_binding.active?
   end
+
+  it 'bind should create a random mac_key for CardBinding' do
+    user = User.create(:id => '0xFFFF0F01'.to_i(16))
+    sim_card = SimCard.create
+
+    card_binding = user.bind(sim_card)
+    assert_equal 16, card_binding.mac_key.length
+  end
 end

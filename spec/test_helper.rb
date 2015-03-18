@@ -19,6 +19,10 @@ end
 class MiniTest::Spec
   include Rack::Test::Methods
 
+  def app
+    MyApp
+  end
+
   before :each do
     DatabaseCleaner.start
   end

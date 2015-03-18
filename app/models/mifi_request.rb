@@ -12,6 +12,10 @@ class MifiRequest
     @user ||= User.find(@data[1].unpack('N*')[0])
   end
 
+  def card_binding
+    @card_binding ||= @user.card_bindings.last
+  end
+
   def valid?
     return !user.nil? && mac_valid?
   rescue
@@ -22,14 +26,17 @@ class MifiRequest
     @s ||= "raw: #{@raw.unpack('H*')}"
   end
 
-  private
   def input
     # raw = "1+input+08+mac+..."
     @input ||= @raw[1..(@raw.index(mac) -2)]
   end
 
+  def mac
+    data[3]
+  end
+
   def mac_key
-    raise new RuntimeError("'mac_key' should be overrided by subclass!")
+    card_binding.mac_key
   end
 
   def mac_valid?

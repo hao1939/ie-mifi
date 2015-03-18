@@ -7,4 +7,12 @@ describe CardBinding do
     assert card_binding.save
     assert_equal card_binding, CardBinding.find(card_binding.id)
   end
+
+  it 'deactivate! should set active? to false' do
+    card_binding = CardBinding.create
+
+    assert card_binding.active?
+    card_binding.deactivate!
+    assert !card_binding.active?
+  end
 end

@@ -21,6 +21,7 @@ class MyApp < Sinatra::Base
   end
 
   helpers MyAppHelpers
+  helpers G3RequestHelpers
 
   include MifiCrypt
 
@@ -39,10 +40,10 @@ class MyApp < Sinatra::Base
   end
 
   post '/3g' do
-    user = @mifi_request.user
-    user.create_card_usage
-    sim_card = SimCard.new # TODO
-    '1' + pk_encrypt(@pkey, sim_card.g3)
+    @user = @mifi_request.user
+    @card = select_an_avaliable_card
+    @card_binding = bind_card(@user, @card)
+    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3)
   end
 
   post '/auth' do

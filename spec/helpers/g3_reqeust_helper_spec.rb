@@ -8,7 +8,7 @@ describe G3RequestHelpers do
     @user.expect(:unbind, true)
     @user.expect(:bind, true, [@sim_card])
 
-    bind_card
+    bind_card(@user, @sim_card)
 
     @user.verify
   end
