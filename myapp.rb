@@ -5,10 +5,10 @@ require 'mifi_crypt'
 Dir.glob(File.expand_path('../app/helpers/*.rb', __FILE__)).each { |r| require r}
 
 require File.expand_path('../app/models/sim_card.rb', __FILE__)
-require File.expand_path('../app/models/mifi_request.rb', __FILE__)
-require File.expand_path('../app/models/g3_request.rb', __FILE__)
-require File.expand_path('../app/models/auth_request.rb', __FILE__)
-require File.expand_path('../app/models/beat_request.rb', __FILE__)
+require File.expand_path('../app/models/requests/mifi_request.rb', __FILE__)
+require File.expand_path('../app/models/requests/g3_request.rb', __FILE__)
+require File.expand_path('../app/models/requests/auth_request.rb', __FILE__)
+require File.expand_path('../app/models/requests/beat_request.rb', __FILE__)
 require File.expand_path('../app/models/user.rb', __FILE__)
 require File.expand_path('../app/models/flow_log.rb', __FILE__)
 require File.expand_path('../app/models/card_binding.rb', __FILE__)

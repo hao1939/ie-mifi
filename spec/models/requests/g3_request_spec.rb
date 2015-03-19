@@ -1,5 +1,3 @@
-require_relative '../test_helper.rb'
-
 class G3RequestTest < MyAppTest
   include MyAppHelpers
 

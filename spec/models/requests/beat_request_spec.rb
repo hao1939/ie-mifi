@@ -1,5 +1,3 @@
-require_relative '../test_helper.rb'
-
 describe BeatRequest do
   include MyAppHelpers
 
