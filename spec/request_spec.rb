@@ -51,4 +51,11 @@ describe MyApp do
 
     assert_equal 200, last_response.status
   end
+
+  it 'test /log request' do
+    request_body = "1\x04\xFF\xFF\xFF\x01\x06\x15\x03\x12 0\x01\b"+ "\xAAg*&\xF9\xEC\x0EF"+ "this is test log\r\nyou check log\x00".b
+    post '/log', request_body, "CONTENT_TYPE"=>"application/octet-stream"
+
+    assert_equal 200, last_response.status
+  end
 end

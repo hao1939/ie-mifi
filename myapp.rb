@@ -9,6 +9,7 @@ require File.expand_path('../app/models/requests/mifi_request.rb', __FILE__)
 require File.expand_path('../app/models/requests/g3_request.rb', __FILE__)
 require File.expand_path('../app/models/requests/auth_request.rb', __FILE__)
 require File.expand_path('../app/models/requests/beat_request.rb', __FILE__)
+require File.expand_path('../app/models/requests/log_request.rb', __FILE__)
 require File.expand_path('../app/models/user.rb', __FILE__)
 require File.expand_path('../app/models/flow_log.rb', __FILE__)
 require File.expand_path('../app/models/card_binding.rb', __FILE__)
@@ -57,6 +58,13 @@ class MyApp < Sinatra::Base
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
+    "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+  end
+
+  post '/log' do
+    log_request = LogRequest.new(*@data)
+    halt(400, 'sign error!') unless log_request.valid?
+    log_request.save_card_log
     "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
   end
 end

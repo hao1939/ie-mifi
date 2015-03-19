@@ -1,4 +1,4 @@
-class CreateSimCard < ActiveRecord::Migration
+class CreateSimCards < ActiveRecord::Migration
   def change
     create_table :sim_cards do |t|
       t.string :status # 'marked', 'used', 'free'

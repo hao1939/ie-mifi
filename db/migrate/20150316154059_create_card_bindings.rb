@@ -1,4 +1,4 @@
-class CreateCardBinding < ActiveRecord::Migration
+class CreateCardBindings < ActiveRecord::Migration
   def change
     create_table :card_bindings  do |t|
       t.belongs_to :user, limit: 8
