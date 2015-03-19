@@ -43,7 +43,7 @@ class MyApp < Sinatra::Base
     @user = @mifi_request.user
     @card = select_an_avaliable_card
     @card_binding = bind_card(@user, @card)
-    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3)
+    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.data_files)
   end
 
   post '/auth' do

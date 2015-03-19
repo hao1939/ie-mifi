@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
   def bind(sim_card)
     mac_key = SecureRandom.random_bytes(16)
-    CardBinding.create(:user_id => id, :sim_card_id => sim_card.id, :mac_key => mac_key)
+    CardBinding.create(:user => self, :sim_card => sim_card, :mac_key => mac_key)
   end
 
   def card_bindings

@@ -13,4 +13,11 @@ describe G3RequestHelpers do
     @user.verify
   end
 
+  it 'select a sim_card should mark it, so it will not be select again for a while' do
+    sim_card = SimCard.create
+    SimCard.stub(:free_cards, [sim_card]) do
+      sim_card = select_an_avaliable_card
+      assert_equal 'marked', sim_card.status
+    end
+  end
 end

@@ -6,6 +6,8 @@ module G3RequestHelpers
 
   def select_an_avaliable_card
     # TODO
-    SimCard.create
+    sim_card = SimCard.free_cards.first
+    sim_card.mark
+    sim_card
   end
 end
