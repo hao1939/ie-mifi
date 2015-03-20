@@ -13,17 +13,13 @@ class MifiRequest
   end
 
   def card_binding
-    @card_binding ||= @user.card_bindings.last
+    @card_binding ||= user.card_bindings.last
   end
 
   def valid?
     return !user.nil? && mac_valid?
   rescue
     nil
-  end
-
-  def to_s
-    @s ||= "raw: #{@raw.unpack('H*')}"
   end
 
   def input
