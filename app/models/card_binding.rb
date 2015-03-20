@@ -5,7 +5,7 @@ class CardBinding < ActiveRecord::Base
 
   after_create :mark_sim_card_used
   def mark_sim_card_used
-    sim_card && sim_card.status = 'used'
+    sim_card && (sim_card.status = 'used') && sim_card.save!
   end
 
   def deactivate!

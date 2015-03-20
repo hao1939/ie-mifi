@@ -19,7 +19,9 @@ describe CardBinding do
     sim_card.mark
 
     card_binding = CardBinding.create(:sim_card => sim_card)
-    assert_equal 'used', sim_card.status
+
+    query_sim_card = SimCard.find(sim_card.id)
+    assert_equal 'used', query_sim_card.status
   end
 
   it 'deactivate! should set active? to false' do
@@ -36,6 +38,7 @@ describe CardBinding do
 
     card_binding.deactivate!
 
-    assert_equal 'free', sim_card.status
+    query_sim_card = SimCard.find(sim_card.id)
+    assert_equal 'free', query_sim_card.status
   end
 end
