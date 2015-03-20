@@ -1,4 +1,5 @@
 require 'securerandom'
+require File.expand_path('../client_action.rb', __FILE__)
 
 class User < ActiveRecord::Base
   self.primary_key = "id"
@@ -16,7 +17,7 @@ class User < ActiveRecord::Base
     card_bindings.each {|b| b.deactivate! }
   end
 
-  def create_card_usage
-    true
+  def pending_actions
+    @pending_actions ||= ClientAction.where(:user => self, :delivered => false)
   end
 end

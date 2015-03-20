@@ -55,10 +55,13 @@ class MyApp < Sinatra::Base
 
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
+    @user = beat_request.user
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
-    "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+    halt("\x00\x00") if @user.pending_actions.empty?
+    @user.pending_actions.each {|a| a.mark_delivered!} # TODO
+    @user.pending_actions.map(&:cmd).join
   end
 
   post '/log' do

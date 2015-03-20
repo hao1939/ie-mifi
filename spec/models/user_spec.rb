@@ -52,4 +52,12 @@ describe User do
     card_binding = user.bind(sim_card)
     assert_equal 16, card_binding.mac_key.length
   end
+
+  it 'pending_actions should return not delivered client actions' do
+    user = User.create(:id => '0xFF00F01'.to_i(16))
+    client_action = ClientAction.create(:user => user)
+
+    assert user.pending_actions.include?(client_action)
+    assert !client_action.delivered?
+  end
 end
