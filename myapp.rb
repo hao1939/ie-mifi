@@ -44,11 +44,12 @@ class MyApp < Sinatra::Base
     @user = @mifi_request.user
     @card = select_an_avaliable_card
     @card_binding = bind_card(@user, @card)
-    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.data_files)
+    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3_data)
   end
 
   post '/auth' do
     auth_request = AuthRequest.new(*@data)
+puts auth_request.inspect
     halt(400, 'sign error!') unless auth_request.valid?
     'SW1SW2'
   end
@@ -56,6 +57,7 @@ class MyApp < Sinatra::Base
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
     @user = beat_request.user
+puts beat_request.inspect
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
@@ -66,6 +68,7 @@ class MyApp < Sinatra::Base
 
   post '/log' do
     log_request = LogRequest.new(*@data)
+puts log_request.inspect
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
     "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
