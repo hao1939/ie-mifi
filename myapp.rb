@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'mifi_crypt'
 
+require File.expand_path('../lib/utils.rb', __FILE__)
 Dir.glob(File.expand_path('../app/helpers/*.rb', __FILE__)).each { |r| require r}
 
 require File.expand_path('../app/models/sim_card.rb', __FILE__)
