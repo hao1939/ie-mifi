@@ -55,7 +55,6 @@ describe MyApp do
 
   it 'test /beat with pending action to be delivered' do
     request_body =  "1\x04\xFF\xFF\xFF\x01\x04\x01\x02\x03\x04\b\x88\x15L\xE6\xBD\xBD\xF1\x90\x010\x02\x11\"\x023D\x01U".b
-    pending_actions = [{:cmd => 'action1'}, {:cmd => 'action2'}]
     user = User.find('0xFFFFFF01'.to_i(16))
 
     ClientAction.create(:user => user, :cmd => 'action1')

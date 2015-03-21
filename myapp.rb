@@ -22,7 +22,6 @@ class MyApp < Sinatra::Base
   end
 
   helpers MyAppHelpers
-  helpers G3RequestHelpers
 
   include MifiCrypt
 
