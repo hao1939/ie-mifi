@@ -13,4 +13,10 @@ class SimCard < ActiveRecord::Base
   def mark
     self.status = 'marked'
   end
+
+  def set_enabled!
+    return if enabled?
+    self.enabled = true
+    save!
+  end
 end

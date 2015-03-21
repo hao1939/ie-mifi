@@ -36,4 +36,13 @@ describe SimCard do
 
     assert_equal expected_g3_date, sim_card.g3_data
   end
+
+  it 'set_enabled! should set enabled to true and save to db' do
+    sim_card = SimCard.create
+    assert !sim_card.enabled?
+    sim_card.set_enabled!
+
+    queried = SimCard.find(sim_card.id)
+    assert queried.enabled?
+  end
 end
