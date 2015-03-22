@@ -26,6 +26,10 @@ class MyApp < Sinatra::Base
 
   include MifiCrypt
 
+  error NoMoreSimCard do
+    [501, 'no more sim_card!']
+  end
+
   get '/' do
     "Hello ieMiFi!"
   end
@@ -42,8 +46,13 @@ class MyApp < Sinatra::Base
 
   post '/3g' do
     @user = @mifi_request.user
-    @card = select_an_avaliable_card
-    @card_binding = bind_card(@user, @card)
+    if @user.card_bindings.empty?
+      @card = select_an_avaliable_card
+      @card_binding = bind_card(@user, @card)
+    else
+      @card_binding = @user.card_bindings.first
+      @card = @card_binding.sim_card
+    end
     '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3_data)
   end
 

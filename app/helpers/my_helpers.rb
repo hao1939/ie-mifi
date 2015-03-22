@@ -20,11 +20,15 @@ module MyAppHelpers
     user.bind(card)
   end
 
+  class NoMoreSimCard < RuntimeError
+  end
+
   def select_an_avaliable_card
     # TODO
     sim_card = SimCard.free_cards.first
     sim_card.mark
     sim_card
+  rescue
+    raise NoMoreSimCard, 'no more sim_card!'
   end
-
 end
