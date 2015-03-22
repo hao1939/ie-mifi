@@ -6,8 +6,8 @@ class SimCard < ActiveRecord::Base
   end
 
   def g3_data
-    return data_files + file_2ff1 if enabled?
-    data_files + SimCardInit.where(:mcc_mnc => mcc_mnc).first.file_2ff1
+    file_2ff1 = (enabled?) ? card_init_param.file_2ff1 : card_init_param.init_file_2ff1
+    data_files + file_2ff1
   end
 
   def mark
@@ -18,5 +18,9 @@ class SimCard < ActiveRecord::Base
     return if enabled?
     self.enabled = true
     save!
+  end
+
+  def card_init_param
+    @sim_card_init ||= SimCardInit.where(:mcc => mcc, :mnc => mnc).first
   end
 end
