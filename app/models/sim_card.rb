@@ -2,7 +2,7 @@ require File.expand_path('../sim_card_init.rb', __FILE__)
 
 class SimCard < ActiveRecord::Base
   def self.free_cards
-    SimCard.where(status: 'free')
+    SimCard.where(status: 'free', ready: true)
   end
 
   def g3_data

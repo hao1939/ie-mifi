@@ -49,4 +49,11 @@ describe SimCard do
     queried = SimCard.find(sim_card.id)
     assert queried.network_enabled?
   end
+
+  it 'free_cards have an implicitly pre-condtion: ready' do
+    free_cards = SimCard.free_cards
+    assert_equal 0, free_cards.size
+    SimCard.create(:status => "free", :ready => true)
+    assert SimCard.free_cards.first.ready?
+  end
 end
