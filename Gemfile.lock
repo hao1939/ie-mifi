@@ -1,4 +1,11 @@
 GIT
+  remote: hao@hao1939.com:/var/git/mifi-card_reader.git
+  revision: 7531ef3589d4cd6db6f4bd957741e9a3e96a8b0f
+  branch: master
+  specs:
+    mifi-card_reader (0.1.0)
+
+GIT
   remote: hao@hao1939.com:/var/git/mifi_crypt.git
   revision: a1b4e1451235e85cbc2c4153347afa529af15510
   tag: v0.0.9
@@ -64,6 +71,7 @@ PLATFORMS
 
 DEPENDENCIES
   database_cleaner
+  mifi-card_reader!
   mifi_crypt!
   minitest
   pry

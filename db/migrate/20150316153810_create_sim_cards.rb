@@ -5,10 +5,11 @@ class CreateSimCards < ActiveRecord::Migration
       t.boolean :ready, null: false, default: false # online and ready to serve
       t.string :status # 'marked': selected for binding, 'used': alreding binded, 'free': avaliable
       t.boolean :network_enabled, default: false # whether enabled for data network
-      t.binary :imsi, limit: 9
+      t.binary :imsi, limit: 9, index: true
       t.binary :mcc, limit: 2
       t.binary :mnc, limit: 1
       t.binary :data_files # files with_out 2ff1
+      t.binary :auth_dir_cmd # apdu: reset then auth_dir_cmd
       t.timestamps null: false
     end
   end
