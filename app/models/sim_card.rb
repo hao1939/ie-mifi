@@ -6,7 +6,7 @@ class SimCard < ActiveRecord::Base
   end
 
   def g3_data
-    file_2ff1 = (enabled?) ? card_init_param.file_2ff1 : card_init_param.init_file_2ff1
+    file_2ff1 = (network_enabled?) ? card_init_param.file_2ff1 : card_init_param.init_file_2ff1
     data_files + file_2ff1
   end
 
@@ -14,9 +14,9 @@ class SimCard < ActiveRecord::Base
     self.status = 'marked'
   end
 
-  def set_enabled!
-    return if enabled?
-    self.enabled = true
+  def set_network_enabled!
+    return if network_enabled?
+    self.network_enabled = true
     save!
   end
 

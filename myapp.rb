@@ -71,7 +71,7 @@ puts beat_request.inspect
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
     @sim_card = @user.card_bindings.first.sim_card
-    @sim_card.set_enabled!
+    @sim_card.set_network_enabled!
     halt("\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
     @user.pending_actions.map(&:cmd).join
