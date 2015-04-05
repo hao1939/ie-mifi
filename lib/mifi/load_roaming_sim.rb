@@ -1,4 +1,4 @@
-def load_sim_card_init(filename)
+def load_roaming_sim(filename)
   SimCardInit.connection
   puts "SimCardInit before import: #{SimCardInit.count}"
   file = File.open(filename, 'r:utf-8')
