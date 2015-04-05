@@ -15,7 +15,8 @@ describe MyApp do
     sim_card = SimCard.create!(:network_enabled => true,
       :data_files => "everything fine",
       :mcc => "\x64\xf0",
-      :mnc => "\x10")
+      :mnc => "\x10",
+      :card_addr => "Alcor Micro AU9540 00 00/0")
     CardBinding.create!(:user_id => '0xFFFFFF01'.to_i(16),
       :sim_card_id => sim_card.id,
       :mac_key => "\x11\"3DUfw\x88\x99\xAA\xBB\xCC\xDD\xEE\xFF\x00".b)

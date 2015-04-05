@@ -41,4 +41,11 @@ describe CardBinding do
     query_sim_card = SimCard.find(sim_card.id)
     assert_equal 'free', query_sim_card.status
   end
+
+  it 'get sim_card' do
+    sim_card = SimCard.create
+    card_binding = CardBinding.create(:sim_card => sim_card)
+
+    assert card_binding.sim_card.is_a?(SimCard)
+  end
 end

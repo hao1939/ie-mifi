@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'sinatra/activerecord'
 require 'mifi_crypt'
+require 'mifi/card_reader'
 
 require File.expand_path('../lib/utils.rb', __FILE__)
 Dir.glob(File.expand_path('../app/helpers/*.rb', __FILE__)).each { |r| require r}
@@ -60,7 +61,9 @@ class MyApp < Sinatra::Base
     auth_request = AuthRequest.new(*@data)
 puts auth_request.inspect
     halt(400, 'sign error!') unless auth_request.valid?
-    'SW1SW2'
+    @sim_card = auth_request.card_binding.sim_card
+    Mifi::CardReader.use_usb_reader # TODO
+    Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
   end
 
   post '/beats' do
