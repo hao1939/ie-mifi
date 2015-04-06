@@ -7,8 +7,8 @@ namespace :mifi do
   task :sim_cards do
     error_list = []
     SimCard.update_all(:ready => false)
-    Mifi::CardReader.use_usb_reader # TODO
-    # Mifi::CardReader.use_net_reader
+    #Mifi::CardReader.use_usb_reader # TODO
+    Mifi::CardReader.use_net_reader
     Mifi::CardReader.readers.each do |reader_name|
       sim_cards = Mifi::CardReader.read(reader_name)
       sim_cards.each do |sim_card|
@@ -16,7 +16,7 @@ namespace :mifi do
           error_list.push(sim_card)
           next
         end
-        s = SimCard.find_or_create_by(imsi: sim_card[:imsi]) do |s|
+        s = SimCard.find_or_create_by(imsi: sim_card[:imsi][0..8]) do |s|
           # Those assignment only happens the first time!
           s.mcc = sim_card[:mcc]
           s.mnc = sim_card[:mnc]

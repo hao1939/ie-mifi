@@ -18,6 +18,7 @@ require File.expand_path('../app/models/card_binding.rb', __FILE__)
 
 class MyApp < Sinatra::Base
   register Sinatra::ActiveRecordExtension
+  API_VERSION = '1'
 
   configure :development, :test do
     require 'pry'
@@ -54,7 +55,7 @@ class MyApp < Sinatra::Base
       @card_binding = @user.card_bindings.first
       @card = @card_binding.sim_card
     end
-    '1' + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3_data)
+    API_VERSION + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3_data)
   end
 
   post '/auth' do
@@ -62,8 +63,9 @@ class MyApp < Sinatra::Base
 puts auth_request.inspect
     halt(400, 'sign error!') unless auth_request.valid?
     @sim_card = auth_request.card_binding.sim_card
-    Mifi::CardReader.use_usb_reader # TODO
-    Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
+    Mifi::CardReader.use_net_reader # TODO
+    auth_res = Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
+    API_VERSION + auth_res.length.chr + auth_res
   end
 
   post '/beats' do
@@ -75,9 +77,9 @@ puts beat_request.inspect
     flow_log.save!
     @sim_card = @user.card_bindings.first.sim_card
     @sim_card.set_network_enabled!
-    halt("\x00\x00") if @user.pending_actions.empty?
+    halt(API_VERSION + "\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
-    @user.pending_actions.map(&:cmd).join
+    API_VERSION + @user.pending_actions.map(&:cmd).join
   end
 
   post '/log' do
@@ -85,7 +87,7 @@ puts beat_request.inspect
 puts log_request.inspect
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
-    "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+    API_VERSION + "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
   end
 end
 
