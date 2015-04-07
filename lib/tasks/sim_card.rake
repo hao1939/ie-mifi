@@ -7,8 +7,6 @@ namespace :mifi do
   task :sim_cards do
     error_list = []
     SimCard.update_all(:ready => false)
-    #Mifi::CardReader.use_usb_reader # TODO
-    Mifi::CardReader.use_net_reader
     Mifi::CardReader.readers.each do |reader_name|
       sim_cards = Mifi::CardReader.read(reader_name)
       sim_cards.each do |sim_card|

@@ -31,6 +31,9 @@ class MyApp < Sinatra::Base
   error NoMoreSimCard do
     [501, 'no more sim_card!']
   end
+  error Mifi::CardError do
+    [410, 'card error!']
+  end
 
   get '/' do
     "Hello ieMiFi!"
@@ -63,7 +66,6 @@ class MyApp < Sinatra::Base
 puts auth_request.inspect
     halt(400, 'sign error!') unless auth_request.valid?
     @sim_card = auth_request.card_binding.sim_card
-    Mifi::CardReader.use_net_reader # TODO
     auth_res = Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
     API_VERSION + auth_res.length.chr + auth_res
   end
