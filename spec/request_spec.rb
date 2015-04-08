@@ -51,7 +51,7 @@ describe MyApp do
     CardBinding.stub(:where, []) do
       sim_card = SimCard.create(:network_enabled => true, :data_files => "everything fine", :mcc => 'mcc', :mnc => 'mnc')
       SimCardInit.create(:mcc => "mcc", :mnc => "mnc", :file_2ff1 => '!')
-      SimCard.stub(:free_cards, [sim_card]) do
+      SimCard.stub(:free_cards, Minitest::Mock.new.expect(:first!, sim_card)) do
         post '/3g', request_body, "CONTENT_TYPE"=>"application/octet-stream"
       end
     end
@@ -93,7 +93,7 @@ describe MyApp do
     post '/beats', request_body, "CONTENT_TYPE"=>"application/octet-stream"
 
     assert_equal 200, last_response.status
-    assert_equal "\x00\x00", last_response.body
+    assert_equal "1\x00\x00", last_response.body
   end
 
   it 'test /beat with pending action to be delivered' do
@@ -107,7 +107,7 @@ describe MyApp do
     post '/beats', request_body, "CONTENT_TYPE"=>"application/octet-stream"
 
     assert_equal 200, last_response.status
-    assert_equal expected_response_body, last_response.body
+    assert_equal '1'+expected_response_body, last_response.body
   end
 
   it 'test /log request' do

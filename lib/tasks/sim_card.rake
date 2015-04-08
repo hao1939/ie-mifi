@@ -2,9 +2,11 @@ require 'sinatra/activerecord'
 require 'mifi/card_reader'
 require File.expand_path('../../../app/models/sim_card.rb',  __FILE__)
 
+Mifi::CardReader.use_net_reader
+
 namespace :mifi do
-  desc "init sim_cards, read data files and mark the card_addr of the sim_cards"
-  task :sim_cards do
+  desc "read sim_cards, read data files and mark the card_addr of the sim_cards"
+  task :read_sim_cards do
     error_list = []
     SimCard.update_all(:ready => false)
     Mifi::CardReader.readers.each do |reader_name|
@@ -29,4 +31,17 @@ namespace :mifi do
     end
     puts "Errors: #{error_list}"
   end
+
+  desc "verify mcc/mnc of sim_cards"
+  task :verify_mcc_mnc do
+    missing_mcc_mnc = []
+    SimCard.select(:mcc, :mnc).distinct.each do |s|
+      if SimCardInit.where(:mcc => s.mcc, :mnc => s.mnc).empty?
+        missing_mcc_mnc.push({:mcc => s.mcc, :mnc => s.mnc})
+      end
+    end
+    puts "Missing MCC/MNC: #{missing_mcc_mnc}"
+  end
+
+  task :default => :init
 end

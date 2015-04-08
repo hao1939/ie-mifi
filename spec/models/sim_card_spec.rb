@@ -56,4 +56,14 @@ describe SimCard do
     SimCard.create(:status => "free", :ready => true)
     assert SimCard.free_cards.first.ready?
   end
+
+  it 'select free_cards with the giving mcc/mnc' do
+    mcc, mnc = 'mc', 'c'
+    SimCard.create(:mcc => mcc, :mnc => mnc, :status => 'free')
+    SimCard.create(:mcc => mcc, :mnc => mnc, :status => 'free', :ready => true)
+
+    cards_with_mcc_mnc = SimCard.with_mcc_mnc(mcc, mnc)
+    assert_equal 1, cards_with_mcc_mnc.size
+    assert cards_with_mcc_mnc.first.ready
+  end
 end

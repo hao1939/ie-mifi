@@ -9,6 +9,14 @@ class G3Request < MifiRequest
       nil
   end
 
+  def mcc
+    @data[5][0..1]
+  end
+
+  def mnc
+    @data[5][2]
+  end
+
   private
   def mac
     data[9]

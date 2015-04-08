@@ -1,9 +1,8 @@
 require File.expand_path('../sim_card_init.rb', __FILE__)
 
 class SimCard < ActiveRecord::Base
-  def self.free_cards
-    SimCard.where(status: 'free', ready: true)
-  end
+  scope :free_cards, -> { where(status: 'free', ready: true) }
+  scope :with_mcc_mnc, ->(mcc, mnc) { free_cards.where(mcc: mcc, mnc: mnc) }
 
   def g3_data
     file_2ff1 = (network_enabled?) ? card_init_param.file_2ff1 : card_init_param.init_file_2ff1

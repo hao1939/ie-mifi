@@ -3,6 +3,8 @@ require 'sinatra/activerecord'
 require 'mifi_crypt'
 require 'mifi/card_reader'
 
+Mifi::CardReader.use_net_reader
+
 require File.expand_path('../lib/utils.rb', __FILE__)
 Dir.glob(File.expand_path('../app/helpers/*.rb', __FILE__)).each { |r| require r}
 
@@ -44,15 +46,17 @@ class MyApp < Sinatra::Base
   end
 
   before '/3g' do
-    @mifi_request = G3Request.new(*@data)
-    halt(400, 'sign error!') unless @mifi_request.valid?
-    @pkey = @mifi_request.pkey
+    @g3_request = G3Request.new(*@data)
+    halt(400, 'sign error!') unless @g3_request.valid?
+    @pkey = @g3_request.pkey
   end
 
   post '/3g' do
-    @user = @mifi_request.user
+    @user = @g3_request.user
     if @user.card_bindings.empty?
-      @card = select_an_avaliable_card
+      mcc = @g3_request.mcc
+      mnc = @g3_request.mnc
+      @card = select_an_avaliable_card(mcc, mnc)
       @card_binding = bind_card(@user, @card)
     else
       @card_binding = @user.card_bindings.first
