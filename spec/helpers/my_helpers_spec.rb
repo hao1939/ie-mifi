@@ -21,20 +21,4 @@ describe MyAppHelpers do
 
     @user.verify
   end
-
-  it 'select a sim_card should mark it, so it will not be select again for a while' do
-    sim_card = SimCard.create
-    SimCard.stub(:free_cards, Minitest::Mock.new.expect(:first!, sim_card)) do
-      selected = select_an_avaliable_card
-      assert_equal 'marked', selected.status
-    end
-  end
-
-  it 'select card with the requested mcc/mnc first' do
-    sim_card = SimCard.create
-    SimCard.stub(:with_mcc_mnc, Minitest::Mock.new.expect(:first!, sim_card)) do
-      selected = select_an_avaliable_card
-      assert_equal sim_card, selected
-    end
-  end
 end

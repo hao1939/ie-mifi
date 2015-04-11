@@ -18,17 +18,18 @@ require File.expand_path('../app/models/user.rb', __FILE__)
 require File.expand_path('../app/models/flow_log.rb', __FILE__)
 require File.expand_path('../app/models/card_binding.rb', __FILE__)
 
+require File.expand_path('../app/models/card_selector/card_selector.rb', __FILE__)
+
 class MyApp < Sinatra::Base
-  register Sinatra::ActiveRecordExtension
   API_VERSION = '1'
 
   configure :development, :test do
     require 'pry'
   end
 
+  register Sinatra::ActiveRecordExtension
   helpers MyAppHelpers
-
-  include MifiCrypt
+  helpers MifiCrypt
 
   error NoMoreSimCard do
     [501, 'no more sim_card!']
@@ -45,18 +46,14 @@ class MyApp < Sinatra::Base
     @data = parse_body(request.body)
   end
 
-  before '/3g' do
-    @g3_request = G3Request.new(*@data)
-    halt(400, 'sign error!') unless @g3_request.valid?
-    @pkey = @g3_request.pkey
-  end
-
   post '/3g' do
-    @user = @g3_request.user
+    g3_request = G3Request.new(*@data)
+    halt(400, 'sign error!') unless g3_request.valid?
+    @pkey = g3_request.pkey
+    @user = g3_request.user
     if @user.card_bindings.empty?
-      mcc = @g3_request.mcc
-      mnc = @g3_request.mnc
-      @card = select_an_avaliable_card(mcc, mnc)
+      @card_selector = CardSelector.new(@user,  g3_request.mcc, g3_request.mnc)
+      @card = @card_selector.select_and_mark_card
       @card_binding = bind_card(@user, @card)
     else
       @card_binding = @user.card_bindings.first
