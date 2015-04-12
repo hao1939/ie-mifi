@@ -22,7 +22,7 @@ namespace :mifi do
           s.mnc = sim_card[:mnc]
           s.data_files = sim_card[:data_files]
           s.auth_dir_cmd = sim_card[:auth_dir_cmd]
-          s.status = 'free'
+          s.status = 'locked'
         end
         s.card_addr = sim_card[:card_addr]
         s.ready = true

@@ -3,7 +3,7 @@ class CreateSimCards < ActiveRecord::Migration
     create_table :sim_cards do |t|
       t.string :card_addr # for example "192.168.0.1:2345/1", "Reader one"
       t.boolean :ready, null: false, default: false # online and ready to serve
-      t.string :status # 'marked': selected for binding, 'used': alreding binded, 'free': avaliable
+      t.string :status # 'marked': selected for binding, 'used': alreding binded, 'free': avaliable, 'locked': locked
       t.boolean :network_enabled, default: false # whether enabled for data network
       t.binary :imsi, limit: 9, index: true
       t.binary :mcc, limit: 2
