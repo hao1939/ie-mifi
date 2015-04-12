@@ -11,9 +11,11 @@ def load_roaming_sim(filename)
     sim_card_init.mnc = attrs[1].hex_to_bytes
     sim_card_init.country = attrs[2]
     sim_card_init.network = attrs[3]
-    sim_card_init.file_2ff1 = sprintf("2ff1%02x%s", attrs[4].length / 2 , attrs[4]).hex_to_bytes
-    sim_card_init.init_file_2ff1 = sprintf("2ff1%02x%s", attrs[5].length / 2 , attrs[5]).hex_to_bytes
-    sim_card_init.memo = attrs[6]
+    # attrs[4]
+    # attrs[5]
+    sim_card_init.file_2ff1 = sprintf("2ff1%02x%s", attrs[6].length / 2 , attrs[6]).hex_to_bytes
+    sim_card_init.init_file_2ff1 = sprintf("2ff1%02x%s", attrs[7].length / 2 , attrs[7]).hex_to_bytes
+    sim_card_init.memo = attrs[8]
 
     puts sim_card_init.inspect
     sim_card_init.save!
