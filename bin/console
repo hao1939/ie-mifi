@@ -11,5 +11,38 @@ require File.expand_path('../../myapp.rb', __FILE__)
 # Pry.start
 
 require "pry"
-Pry.start
 
+puts "list_sim_cards, unlock_sim_card(sim_card_id), list_active_cardbindings, deactivate_cardbinding(cardbinding_id), list_static_card_assignment"
+
+def list_sim_cards
+  puts "id, iccid, imsi, status, ready?, card_addr"
+  SimCard.all.each do |s|
+    puts "#{s.id}, #{s.imsi.unpack('H*')}, #{s.status}, #{s.ready?}, #{s.card_addr}"
+  end
+end
+
+def unlock_sim_card(sim_card_id)
+  sim_card = SimCard.find(sim_card_id)
+  sim_card.update(:status => 'free') if sim_card.status == 'locked'
+end
+
+def list_active_cardbindings
+  puts "id, user_id, sim_card_id"
+  CardBinding.where(:active => true).each do |c|
+    puts "#{c.id}, #{c.user_id}, #{c.sim_card_id}"
+  end
+end
+
+def deactivate_cardbinding(cardbinding_id)
+  card_binding = CardBinding.find(cardbinding_id)
+  card_binding.deactivate!
+end
+
+def list_static_card_assignment
+  puts "id, user_id, sim_card_id"
+  StaticCardAssignment.active.each do |s|
+    puts "#{s.id}, #{s.user_id}, #{s.sim_card_id}"
+  end
+end
+
+Pry.start
