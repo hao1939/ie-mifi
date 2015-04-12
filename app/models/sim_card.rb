@@ -9,8 +9,9 @@ class SimCard < ActiveRecord::Base
     data_files + file_2ff1
   end
 
-  def mark
+  def mark!
     self.status = 'marked'
+    save
   end
 
   def set_network_enabled!

@@ -16,7 +16,7 @@ describe CardBinding do
   it 'create a CardBinding should mark the SimCard as "used"' do
     sim_card = SimCard.create
     # marked
-    sim_card.mark
+    sim_card.mark!
 
     card_binding = CardBinding.create(:sim_card => sim_card)
 
