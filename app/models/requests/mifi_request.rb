@@ -39,4 +39,8 @@ class MifiRequest
     return false if (input.nil? || mac.nil?)
     mac == des3mac(input, mac_key)
   end
+
+  def raw_to_hex
+    @raw.unpack("H*")[0]
+  end
 end

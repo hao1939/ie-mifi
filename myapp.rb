@@ -23,8 +23,24 @@ require File.expand_path('../app/models/card_selector/card_selector.rb', __FILE_
 class MyApp < Sinatra::Base
   API_VERSION = '1'
 
+  require 'logger'
+  ::Logger.class_eval { alias :write :'<<' }
+  access_log = ::File.join(::File.dirname(::File.expand_path(__FILE__)), 'public', 'log.txt')
+  logger = ::Logger.new(access_log)
+  error_logger = ::File.new(::File.join(::File.dirname(::File.expand_path(__FILE__)), 'public', 'error.log'), "a+")
+  error_logger.sync = true
+
+  configure do
+    use ::Rack::CommonLogger, logger
+  end
+
+  before {
+    env["rack.errors"] =  error_logger
+  }
+
   configure :development, :test do
     require 'pry'
+    set :show_exceptions, false
   end
 
   register Sinatra::ActiveRecordExtension
@@ -48,6 +64,7 @@ class MyApp < Sinatra::Base
 
   post '/3g' do
     g3_request = G3Request.new(*@data)
+    logger.info "3G REQUEST: #{g3_request.raw_to_hex}"
     halt(400, 'sign error!') unless g3_request.valid?
     @pkey = g3_request.pkey
     @user = g3_request.user
@@ -59,22 +76,28 @@ class MyApp < Sinatra::Base
       @card_binding = @user.card_bindings.first
       @card = @card_binding.sim_card
     end
-    API_VERSION + pk_encrypt(@pkey, @card_binding.mac_key + @card.g3_data)
+    res_before_encyrpt = @card_binding.mac_key + @card.g3_data
+    logger.info "3G RESPONSE before encrypt: #{res_before_encyrpt.b.unpack('H*')[0]}"
+    res = API_VERSION + pk_encrypt(@pkey, res_before_encyrpt)
+    logger.info "3G RESPONSE: #{res.b.unpack('H*')[0]}"
+    res
   end
 
   post '/auth' do
     auth_request = AuthRequest.new(*@data)
-puts auth_request.inspect
+    logger.info "AUTH REQUEST: #{auth_request.raw_to_hex}"
     halt(400, 'sign error!') unless auth_request.valid?
     @sim_card = auth_request.card_binding.sim_card
     auth_res = Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
-    API_VERSION + auth_res.length.chr + auth_res
+    res = API_VERSION + auth_res.length.chr + auth_res
+    logger.info "AUTH RESPONSE: #{res.b.unpack('H*')[0]}"
+    res
   end
 
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
+    logger.info "BEATS REQUEST: #{beat_request.raw_to_hex}"
     @user = beat_request.user
-puts beat_request.inspect
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
@@ -82,15 +105,19 @@ puts beat_request.inspect
     @sim_card.set_network_enabled!
     halt(API_VERSION + "\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
-    API_VERSION + @user.pending_actions.map(&:cmd).join
+    res = API_VERSION + @user.pending_actions.map(&:cmd).join
+    logger.info "BEATS RESPONSE: #{res.b.unpack('H*')[0]}"
+    res
   end
 
   post '/log' do
     log_request = LogRequest.new(*@data)
-puts log_request.inspect
+    logger.info "LOG REQUEST: #{log_request.raw_to_hex}"
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
-    API_VERSION + "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+    res = API_VERSION + "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+    logger.info "LOG RESPONSE: #{res.b.unpack('H*')[0]}"
+    res
   end
 end
 
