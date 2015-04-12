@@ -1,7 +1,7 @@
 GIT
   remote: hao@hao1939.com:/var/git/mifi-card_reader.git
-  revision: 4259bad8d7e49b647e8fa1249206974aaf79771e
-  tag: v0.1.1
+  revision: 6429b71c0375307f043fdb41cb662feda1297b85
+  branch: master
   specs:
     mifi-card_reader (0.1.1)
 

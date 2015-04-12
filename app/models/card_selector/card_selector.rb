@@ -1,3 +1,5 @@
+require_relative 'static_card_assignment.rb'
+
 class NoMoreSimCard < RuntimeError
 end
 
@@ -17,6 +19,10 @@ class CardSelector
 
   private
   def select_card
+    puts "Query static card assignment for user: #{@user.id}"
+    sim_card = StaticCardAssignment.active_assignment_for(@user.id).first
+    return sim_card if sim_card
+    puts "Query static card assignment for user not found: #{@user.id}"
     puts "Select card using mcc/mnc: {:mcc => #{@mcc.inspect}, :mnc => #{@mnc.inspect}}."
     sim_card = SimCard.with_mcc_mnc(@mcc, @mnc).first
     return sim_card if sim_card
