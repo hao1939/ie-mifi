@@ -13,6 +13,8 @@ class LogRequest < MifiRequest
   end
 
   def text
-    @data[4]
+    # '1' + [1] + [2] + [3], notice [1/2/3] have one byte for length
+    i = 4 + @data[1].length + @data[2].length + @data[3].length
+    @text ||= @raw[i..-1]
   end
 end

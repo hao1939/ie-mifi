@@ -113,9 +113,10 @@ class MyApp < Sinatra::Base
   post '/log' do
     log_request = LogRequest.new(*@data)
     logger.info "LOG REQUEST: #{log_request.raw_to_hex}"
+    logger.info "LOG TEXT: #{log_request.text}"
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
-    res = API_VERSION + "\x00" + "\x09" + 'Hi! Mifi!' # TODO now always return hi
+    res = API_VERSION + "\x00\x00"
     logger.info "LOG RESPONSE: #{res.b.unpack('H*')[0]}"
     res
   end
