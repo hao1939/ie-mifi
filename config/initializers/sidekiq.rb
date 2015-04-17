@@ -13,3 +13,5 @@ Sidekiq.configure_client do |config|
     pool_timeout: 10
   }
 end
+
+Sidekiq.default_worker_options = {:retry => false, 'backtrace' => true}

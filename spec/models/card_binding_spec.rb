@@ -1,4 +1,5 @@
-require File.expand_path('../../test_helper.rb',  __FILE__)
+require_relative '../test_helper.rb'
+require_relative '../../app/models/card_binding.rb'
 
 describe CardBinding do
   it 'insert and query from db' do
@@ -47,5 +48,22 @@ describe CardBinding do
     card_binding = CardBinding.create(:sim_card => sim_card)
 
     assert card_binding.sim_card.is_a?(SimCard)
+  end
+
+  it 'active_card_bindings' do
+    card_binding = CardBinding.create(:active => true)
+    active_card_bindings = CardBinding.active_card_bindings
+    assert_equal 1, active_card_bindings.size
+    assert_equal card_binding, active_card_bindings.first
+  end
+
+  it 'freezing_card_bindings are active card_binding which not be touched in 15 minutes' do
+    card_binding = CardBinding.create(:active => true, :updated_at => Time.now - 15.minutes)
+    freezing_card_bindings = CardBinding.freezing_card_bindings
+    assert_equal 1, freezing_card_bindings.size
+
+    card_binding.touch
+    freezing_card_bindings = CardBinding.freezing_card_bindings
+    assert_equal 0, freezing_card_bindings.size
   end
 end

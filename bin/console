@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 
 #require "bundler/setup"
-require File.expand_path('../../myapp.rb', __FILE__)
+require_relative '../myapp.rb'
+require_relative '../config/initializers/sidekiq'
+require_relative '../app/workers/workers.rb'
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -28,7 +30,7 @@ end
 
 def list_active_cardbindings
   puts "id, user_id, sim_card_id"
-  CardBinding.where(:active => true).each do |c|
+  CardBinding.active_card_bindings.each do |c|
     puts "#{c.id}, #{c.user_id}, #{c.sim_card_id}"
   end
 end

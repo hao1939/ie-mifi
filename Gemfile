@@ -19,3 +19,5 @@ group :development, :test do
   gem 'rack-test'
   gem 'database_cleaner'
 end
+
+gem 'whenever', :require => false
