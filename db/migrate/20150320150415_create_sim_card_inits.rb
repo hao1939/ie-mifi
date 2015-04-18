@@ -9,5 +9,6 @@ class CreateSimCardInits < ActiveRecord::Migration
       t.binary :init_file_2ff1
       t.string :memo
     end
+    add_index :sim_card_inits, [:mcc, :mnc], unique: true
   end
 end

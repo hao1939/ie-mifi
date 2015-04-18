@@ -6,9 +6,10 @@ def load_roaming_sim(filename)
     next if line.start_with?('//', '#') || line.blank?
     attrs = line.split(",")
 
-    sim_card_init = SimCardInit.new
-    sim_card_init.mcc = attrs[0].hex_to_bytes
-    sim_card_init.mnc = attrs[1].hex_to_bytes
+    mcc = attrs[0].hex_to_bytes
+    mnc = attrs[1].hex_to_bytes
+
+    sim_card_init = SimCardInit.find_or_initialize_by(:mcc => mcc.b, :mnc => mnc.b)
     sim_card_init.country = attrs[2]
     sim_card_init.network = attrs[3]
     # attrs[4]
