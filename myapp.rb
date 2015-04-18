@@ -60,11 +60,16 @@ class MyApp < Sinatra::Base
 
   before do
     @data = parse_body(request.body)
+    raw = @data[1]
+    logger.info "#{request.path} REQUEST : #{raw.unpack('H*')[0]}"
+  end
+
+  after do
+    logger.info "#{request.path} RESPONSE: #{response.body.join.unpack('H*')[0]}"
   end
 
   post '/3g' do
     g3_request = G3Request.new(*@data)
-    logger.info "3G REQUEST: #{g3_request.raw_to_hex}"
     halt(400, 'sign error!') unless g3_request.valid?
     @pkey = g3_request.pkey
     @user = g3_request.user
@@ -77,26 +82,20 @@ class MyApp < Sinatra::Base
       @card = @card_binding.sim_card
     end
     res_before_encyrpt = @card_binding.mac_key + @card.g3_data
-    logger.info "3G RESPONSE before encrypt: #{res_before_encyrpt.b.unpack('H*')[0]}"
-    res = API_VERSION + pk_encrypt(@pkey, res_before_encyrpt)
-    logger.info "3G RESPONSE: #{res.b.unpack('H*')[0]}"
-    res
+    logger.info "/3g RESPONSE before encrypt: #{res_before_encyrpt.b.unpack('H*')[0]}"
+    API_VERSION + pk_encrypt(@pkey, res_before_encyrpt)
   end
 
   post '/auth' do
     auth_request = AuthRequest.new(*@data)
-    logger.info "AUTH REQUEST: #{auth_request.raw_to_hex}"
     halt(400, 'sign error!') unless auth_request.valid?
     @sim_card = auth_request.card_binding.sim_card
     auth_res = Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
-    res = API_VERSION + auth_res.length.chr + auth_res
-    logger.info "AUTH RESPONSE: #{res.b.unpack('H*')[0]}"
-    res
+    API_VERSION + auth_res.length.chr + auth_res
   end
 
   post '/beats' do
     beat_request = BeatRequest.new(*@data)
-    logger.info "BEATS REQUEST: #{beat_request.raw_to_hex}"
     @user = beat_request.user
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
@@ -105,20 +104,15 @@ class MyApp < Sinatra::Base
     @sim_card.set_network_enabled!
     halt(API_VERSION + "\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
-    res = API_VERSION + @user.pending_actions.map(&:cmd).join
-    logger.info "BEATS RESPONSE: #{res.b.unpack('H*')[0]}"
-    res
+    API_VERSION + @user.pending_actions.map(&:cmd).join
   end
 
   post '/log' do
     log_request = LogRequest.new(*@data)
-    logger.info "LOG REQUEST: #{log_request.raw_to_hex}"
     logger.info "LOG TEXT: #{log_request.text}"
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
-    res = API_VERSION + "\x00\x00"
-    logger.info "LOG RESPONSE: #{res.b.unpack('H*')[0]}"
-    res
+    API_VERSION + "\x00\x00"
   end
 end
 
