@@ -65,6 +65,7 @@ class MyApp < Sinatra::Base
   end
 
   after do
+    @card_binding.touch if @card_binding # touch @card_bindding, keep it lives
     logger.info "#{request.path} RESPONSE: #{response.body.join.unpack('H*')[0]}"
   end
 
@@ -89,7 +90,8 @@ class MyApp < Sinatra::Base
   post '/auth' do
     auth_request = AuthRequest.new(*@data)
     halt(400, 'sign error!') unless auth_request.valid?
-    @sim_card = auth_request.card_binding.sim_card
+    @card_binding = auth_request.card_binding
+    @sim_card = @card_binding.sim_card
     auth_res = Mifi::CardReader.auth(@sim_card.card_addr, auth_request.auth_req)
     API_VERSION + auth_res.length.chr + auth_res
   end
@@ -100,7 +102,8 @@ class MyApp < Sinatra::Base
     halt(400, 'sign error!') unless beat_request.valid?
     flow_log = FlowLog.new(:user_id => beat_request.user.id, :count => beat_request.count)
     flow_log.save!
-    @sim_card = @user.card_bindings.first.sim_card
+    @card_binding = beat_request.card_binding
+    @sim_card = @card_binding.sim_card
     @sim_card.set_network_enabled!
     halt(API_VERSION + "\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
@@ -109,6 +112,7 @@ class MyApp < Sinatra::Base
 
   post '/log' do
     log_request = LogRequest.new(*@data)
+    @card_binding = log_request.card_binding
     logger.info "LOG TEXT: #{log_request.text}"
     halt(400, 'sign error!') unless log_request.valid?
     log_request.save_card_log
