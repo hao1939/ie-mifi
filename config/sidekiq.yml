@@ -7,3 +7,7 @@ default: &default
 
 development:
   <<: *default
+
+production:
+  <<: *default
+
