@@ -1,4 +1,5 @@
 require_relative 'static_card_assignment.rb'
+require_relative '../sim_card_price.rb'
 
 class NoMoreSimCard < RuntimeError
 end

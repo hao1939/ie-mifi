@@ -1,3 +1,4 @@
+require_relative '../../app/models/user.rb'
 def load_users_from_file(filename)
   User.connection
   puts "User before import: #{User.count}"

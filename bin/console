@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
 #require "bundler/setup"
+require_relative '../config/initializers/sidekiq.rb'
+require_relative '../config/initializers/mifi-card_reader.rb'
 require_relative '../myapp.rb'
-require_relative '../config/initializers/sidekiq'
 require_relative '../app/workers/workers.rb'
 
 # You can add fixtures and/or initialization code here to make experimenting
