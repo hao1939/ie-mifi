@@ -105,6 +105,9 @@ class MyApp < Sinatra::Base
     @card_binding = beat_request.card_binding
     @sim_card = @card_binding.sim_card
     @sim_card.set_network_enabled!
+    if beat_request.client_shutdown?
+      @card_binding.deactivate!
+    end
     halt(API_VERSION + "\x00\x00") if @user.pending_actions.empty?
     @user.pending_actions.each {|a| a.mark_delivered!} # TODO
     API_VERSION + @user.pending_actions.map(&:cmd).join
