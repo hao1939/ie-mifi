@@ -1,4 +1,5 @@
 require_relative '../test_helper.rb'
+require_relative '../../app/models/sim_card.rb'
 describe SimCard do
   it 'save data_file to db' do
     data = "6F07090849061070359760956F600664F0108000FF6F7B0564F000FFFF2FF1090103010203040201"
@@ -64,5 +65,15 @@ describe SimCard do
     cards_with_mcc_mnc = SimCard.with_mcc_mnc(mcc, mnc)
     assert_equal 1, cards_with_mcc_mnc.size
     assert cards_with_mcc_mnc.first.ready
+  end
+
+  it 'avaliable_for?' do
+    mcc, mnc = 'mc', 'c'
+    sim_card = SimCard.create(:mcc => mcc, :mnc => mnc, :status => 'free')
+
+    assert !sim_card.avaliable_for?(mcc)
+
+    SimCardPrice.create(:loc_mcc => mcc, :card_mcc => mcc, :card_mnc => mnc, :local => true)
+    assert sim_card.avaliable_for?(mcc)
   end
 end
