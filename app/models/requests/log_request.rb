@@ -1,5 +1,5 @@
-require File.expand_path('../../client_log.rb', __FILE__)
-
+require_relative './mifi_request.rb'
+require_relative '../client_log.rb'
 class LogRequest < MifiRequest
   def save_card_log
     ClientLog.create(:user => user,

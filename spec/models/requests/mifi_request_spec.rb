@@ -1,3 +1,5 @@
+require_relative '../../test_helper.rb'
+require_relative '../../../app/models/requests/mifi_request.rb'
 describe MifiRequest do
   include MyAppHelpers
 

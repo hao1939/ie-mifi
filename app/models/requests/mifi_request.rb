@@ -1,3 +1,4 @@
+require 'mifi_crypt'
 class MifiRequest
   include MifiCrypt
 

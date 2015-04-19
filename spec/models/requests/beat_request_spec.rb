@@ -1,6 +1,5 @@
 require_relative '../../test_helper.rb'
 require_relative '../../../app/models/requests/beat_request.rb'
-
 describe BeatRequest do
   include MyAppHelpers
   it 'should be valid if mac was verified' do

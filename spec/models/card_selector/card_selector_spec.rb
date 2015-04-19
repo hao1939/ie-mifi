@@ -1,5 +1,5 @@
-require File.expand_path('../../../test_helper.rb',  __FILE__)
-
+require_relative '../../test_helper.rb'
+require_relative '../../../app/models/card_selector/card_selector.rb'
 describe CardSelector do
   before(:each) do
     @user = User.all.first

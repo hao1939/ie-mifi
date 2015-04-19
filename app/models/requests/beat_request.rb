@@ -1,3 +1,4 @@
+require_relative './mifi_request.rb'
 class BeatRequest < MifiRequest
   def count
     @count ||= @data[2].unpack('N*')[0]

@@ -1,3 +1,5 @@
+require_relative '../../test_helper.rb'
+require_relative '../../../app/models/requests/auth_request.rb'
 describe AuthRequest do
   include MyAppHelpers
 

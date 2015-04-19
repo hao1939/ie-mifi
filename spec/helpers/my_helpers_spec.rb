@@ -1,5 +1,5 @@
-require File.expand_path('../../test_helper.rb',  __FILE__)
-
+require_relative '../test_helper.rb'
+require_relative '../../app/helpers/my_helpers.rb'
 describe MyAppHelpers do
   include MyAppHelpers
 

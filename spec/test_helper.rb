@@ -6,8 +6,6 @@ require 'rack/test'
 require 'database_cleaner'
 DatabaseCleaner[:active_record].strategy = :transaction
 
-require File.expand_path('../../myapp.rb',  __FILE__)
-
 class MiniTest::Spec
   include Rack::Test::Methods
 

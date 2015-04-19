@@ -1,5 +1,4 @@
 require File.expand_path('../../../test_helper.rb',  __FILE__)
-
 describe StaticCardAssignment do
   it 'active' do
     static_card_assignment = StaticCardAssignment.create(:user_id => 0, :sim_card_id => 0, :active_from => (Time.now - 1.day), :expire_on => (Time.now + 1.day))

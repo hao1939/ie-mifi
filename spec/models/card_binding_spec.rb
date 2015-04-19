@@ -1,6 +1,5 @@
 require_relative '../test_helper.rb'
 require_relative '../../app/models/card_binding.rb'
-
 describe CardBinding do
   it 'insert and query from db' do
     card_binding = CardBinding.new

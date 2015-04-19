@@ -1,5 +1,4 @@
 require_relative '../test_helper.rb'
-
 describe SimCard do
   it 'save data_file to db' do
     data = "6F07090849061070359760956F600664F0108000FF6F7B0564F000FFFF2FF1090103010203040201"

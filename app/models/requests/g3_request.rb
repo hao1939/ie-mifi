@@ -1,3 +1,4 @@
+require_relative './mifi_request.rb'
 class G3Request < MifiRequest
   def pkey
     @data[11]

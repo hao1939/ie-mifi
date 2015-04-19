@@ -1,5 +1,6 @@
 require_relative 'test_helper.rb'
-
+require_relative '../config/initializers/mifi-card_reader.rb'
+require_relative '../myapp.rb'
 describe MyApp do
   it 'test_it_says_hello_world' do
     get '/'

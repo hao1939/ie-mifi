@@ -1,3 +1,5 @@
+require_relative '../../test_helper.rb'
+require_relative '../../../app/models/requests/log_request.rb'
 describe LogRequest do
   include MyAppHelpers
 

@@ -1,8 +1,6 @@
 require 'sinatra/activerecord'
-require 'mifi/card_reader'
-require File.expand_path('../../../app/models/sim_card.rb',  __FILE__)
-
-Mifi::CardReader.use_net_reader
+require_relative '../../config/initializers/mifi-card_reader.rb'
+require_relative '../../app/models/sim_card.rb'
 
 namespace :mifi do
   desc "read sim_cards, read data files and mark the card_addr of the sim_cards"

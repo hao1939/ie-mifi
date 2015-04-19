@@ -1,5 +1,6 @@
-require File.expand_path('../myapp.rb',  __FILE__)
-require File.expand_path('../config/initializers/sidekiq', __FILE__)
+require_relative './config/initializers/sidekiq.rb'
+require_relative './config/initializers/mifi-card_reader.rb'
+require_relative './myapp.rb'
 require 'sidekiq/web'
 
 run Rack::URLMap.new(

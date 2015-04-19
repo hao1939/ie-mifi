@@ -1,3 +1,5 @@
+require_relative '../../test_helper.rb'
+require_relative '../../../app/models/requests/g3_request.rb'
 describe G3Request do
   include MyAppHelpers
 
