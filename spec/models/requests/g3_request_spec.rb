@@ -1,5 +1,8 @@
 require_relative '../../test_helper.rb'
+require_relative '../../../app/models/user.rb'
 require_relative '../../../app/models/requests/g3_request.rb'
+require_relative '../../../app/helpers/my_helpers.rb'
+
 describe G3Request do
   include MyAppHelpers
 
@@ -8,7 +11,12 @@ describe G3Request do
     @io = StringIO.new(request_body)
     g3_request = G3Request.new(*parse_body(@io))
 
-    assert g3_request.valid?
+    assert_equal true, g3_request.valid?
+    assert_equal 0, g3_request.count
+
+    assert_nil g3_request.user.pkey
+    g3_request.save_pkey_at_first_count!
+    assert_equal g3_request.pkey, User.find(g3_request.user.id).pkey
 
     g3_request.stub(:des3mac, false) do
       assert !g3_request.valid?
@@ -17,5 +25,21 @@ describe G3Request do
     g3_request.stub(:digest_valid?, false) do
       assert !g3_request.valid?
     end
+  end
+
+  it 'query pkey from user.pkey if count > 0' do
+    request_body = "1\x04\xFF\xFF\xFF\x01\x02\x00\x01\b\x01\x02\x03\x04\x05\x06\a\b\x04\x00\x00\x00\x01\x03d\xF0\x10\x02\x11\"\x023D\x01U\b\xE3%\xA7\xB0c\x0E\x88\xC0\x13\x8D\x03\x0FN\xC4\xFBw\x85\xEF \xF4^\x9A\xC2\x86/\xF2f\xDC\xE6".b
+    @io = StringIO.new(request_body)
+    g3_request = G3Request.new(*parse_body(@io))
+
+    assert_equal 1, g3_request.count
+
+    pkey = 'expected_pkey'
+    user = Minitest::Mock.new.expect(:pkey, pkey)
+    User.stub(:find, user) do
+      assert_equal pkey, g3_request.pkey
+    end
+
+    assert !g3_request.save_pkey_at_first_count!
   end
 end

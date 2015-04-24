@@ -67,6 +67,7 @@ class MyApp < Sinatra::Base
   post '/3g' do
     g3_request = G3Request.new(*@data)
     halt(400, 'sign error!') unless g3_request.valid?
+    g3_request.save_pkey_at_first_count!
     @pkey = g3_request.pkey
     @user = g3_request.user
     if @user.card_bindings.empty?

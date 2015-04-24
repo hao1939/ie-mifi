@@ -1,7 +1,12 @@
 require_relative './mifi_request.rb'
 class G3Request < MifiRequest
   def pkey
-    @data[11]
+    (count == 0) ? @data[11] : user.pkey
+  end
+
+  def save_pkey_at_first_count!
+    return if count > 0
+    user.update!(:pkey => pkey)
   end
 
   def valid?
@@ -16,6 +21,10 @@ class G3Request < MifiRequest
 
   def mnc
     @data[5][2]
+  end
+
+  def count
+    @data[2].unpack("H*")[0].to_i(16)
   end
 
   private
