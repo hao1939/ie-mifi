@@ -7,8 +7,11 @@ gem 'sidekiq'
 gem 'sinatra-activerecord'
 gem 'mysql2'
 gem 'rake'
-gem 'mifi_crypt', :git => 'hao@hao1939.com:/var/git/mifi_crypt.git', :tag => 'v0.0.9'
-gem 'mifi-card_reader', :git => 'hao@hao1939.com:/var/git/mifi-card_reader.git', :branch => 'master'
+
+group :mifi do
+  gem 'mifi_crypt', :git => 'hao@hao1939.com:/var/git/mifi_crypt.git', :tag => 'v0.0.9'
+  gem 'mifi-card_reader', :git => 'hao@hao1939.com:/var/git/mifi-card_reader.git', :branch => 'master'
+end
 
 gem 'unicorn'
 
